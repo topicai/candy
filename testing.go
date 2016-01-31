@@ -17,15 +17,15 @@ func GoPath() string {
 // is supposed to be used in unit tests and works like:
 //
 //    func TestSomethingUsingData(t *testing.T) {
-//        OpenAnd(path.Join(TestData(), "dataset.txt"), func(f io.Reader) {
+//        OpenAnd(TestData("dataset.txt"), func(f io.Reader) {
 //            // f is the file ./testdata/dataset.txt
 //        })
 //    }
 //
-func TestData() string {
+func TestData(filename string) string {
 	_, f, _, ok := runtime.Caller(1)
 	if !ok {
 		log.Panic("runtime.Caller(1) failed")
 	}
-	return path.Join(path.Dir(f), "testdata")
+	return path.Join(path.Dir(f), "testdata", filename)
 }

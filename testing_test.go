@@ -9,6 +9,6 @@ import (
 
 func TestTestData(t *testing.T) {
 	assert.Equal(t,
-		path.Join(GoPath(), "src/github.com/topicai/candy/testdata"),
-		TestData())
+		path.Join(GoPath(), "src/github.com/topicai/candy/testdata/example.json"),
+		TestData("example.json"))
 }
