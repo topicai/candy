@@ -36,7 +36,7 @@ func TestCreateAndOpen(t *testing.T) {
 		defer func() {
 			assert.NotNil(t, recover())
 		}()
-		MustOpen(filename)
+		mustOpen(filename)
 	}()
 
 	func() {
@@ -64,6 +64,6 @@ func TestCreateAndOpen(t *testing.T) {
 		defer func() {
 			assert.NotNil(t, recover())
 		}()
-		MustCreate("/not-exist-dir/not-exist-file")
+		mustCreate("/not-exist-dir/not-exist-file")
 	}()
 }

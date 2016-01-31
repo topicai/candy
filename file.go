@@ -14,15 +14,13 @@ func Must(e error) {
 	}
 }
 
-// MustOpen panics if it cannot open file.
-func MustOpen(file string) io.ReadCloser {
+func mustOpen(file string) io.ReadCloser {
 	f, e := fs.Open(file)
 	Must(e)
 	return f
 }
 
-// MustCreate panics if it cannot create file.
-func MustCreate(fileanme string) io.WriteCloser {
+func mustCreate(fileanme string) io.WriteCloser {
 	f, e := fs.Create(fileanme)
 	Must(e)
 	return f
@@ -38,7 +36,7 @@ func MustCreate(fileanme string) io.WriteCloser {
 //            return s
 //    }).(*AStruct)
 func OpenAnd(file string, fn func(r io.Reader) interface{}) interface{} {
-	f := MustOpen(file)
+	f := mustOpen(file)
 	defer f.Close()
 	return fn(f)
 }
@@ -52,7 +50,7 @@ func OpenAnd(file string, fn func(r io.Reader) interface{}) interface{} {
 //        Must(json.NewEncoder(w).Encode(s))
 //    })
 func CreateAnd(file string, fn func(w io.Writer)) {
-	f := MustCreate(file)
+	f := mustCreate(file)
 	defer f.Close()
 	fn(f)
 }
