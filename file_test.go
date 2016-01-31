@@ -1,6 +1,7 @@
 package candy
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -28,7 +29,7 @@ func TestMustWithError(t *testing.T) {
 	}()
 }
 
-func TestCreateAndOpen(t *testing.T) {
+func TestWithCreateAndOpened(t *testing.T) {
 	filename := path.Join(os.TempDir(),
 		fmt.Sprintf("github.com-augmn-common-candy-%v", time.Now().UnixNano()))
 
@@ -36,14 +37,14 @@ func TestCreateAndOpen(t *testing.T) {
 		defer func() {
 			assert.NotNil(t, recover())
 		}()
-		MustOpen(filename)
+		mustOpen(filename)
 	}()
 
 	func() {
 		defer func() {
 			assert.Nil(t, recover())
 		}()
-		CreateAnd(filename, func(w io.Writer) {
+		WithCreated(filename, func(w io.Writer) {
 			fmt.Fprintf(w, "Hello!")
 		})
 	}()
@@ -53,7 +54,7 @@ func TestCreateAndOpen(t *testing.T) {
 			assert.Nil(t, recover())
 		}()
 		assert.Equal(t, "Hello!",
-			OpenAnd(filename, func(r io.Reader) interface{} {
+			WithOpened(filename, func(r io.Reader) interface{} {
 				var x string
 				fmt.Fscanf(r, "%s", &x)
 				return x
@@ -64,6 +65,13 @@ func TestCreateAndOpen(t *testing.T) {
 		defer func() {
 			assert.NotNil(t, recover())
 		}()
-		MustCreate("/not-exist-dir/not-exist-file")
+		mustCreate("/not-exist-dir/not-exist-file")
 	}()
+}
+
+func TestReadAll(t *testing.T) {
+	m := make(map[string]string)
+	Must(json.NewDecoder(ReadAll(TestData("example.json"))).Decode(&m))
+	assert.Equal(t, "Yi", m["Name"])
+	assert.Equal(t, "36", m["Age"])
 }
