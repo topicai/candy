@@ -5,8 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
-
-	"github.com/wangkuiyi/fs"
+	"os"
 )
 
 // Must panics if e is not nil.
@@ -17,13 +16,13 @@ func Must(e error) {
 }
 
 func mustOpen(file string) io.ReadCloser {
-	f, e := fs.Open(file)
+	f, e := os.Open(file)
 	Must(e)
 	return f
 }
 
 func mustCreate(fileanme string) io.WriteCloser {
-	f, e := fs.Create(fileanme)
+	f, e := os.Create(fileanme)
 	Must(e)
 	return f
 }
