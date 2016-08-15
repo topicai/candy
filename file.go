@@ -39,7 +39,7 @@ func mustCreate(fileanme string) io.WriteCloser {
 //
 func WithOpened(file string, fn func(r io.Reader) interface{}) interface{} {
 	f := mustOpen(file)
-	defer f.Close()
+	defer func() { Must(f.Close()) }()
 	return fn(f)
 }
 
@@ -54,7 +54,7 @@ func WithOpened(file string, fn func(r io.Reader) interface{}) interface{} {
 //
 func WithCreated(file string, fn func(w io.Writer)) {
 	f := mustCreate(file)
-	defer f.Close()
+	defer func() { Must(f.Close()) }()
 	fn(f)
 }
 
@@ -67,7 +67,7 @@ func WithCreated(file string, fn func(w io.Writer)) {
 //
 func ReadAll(file string) io.Reader {
 	f := mustOpen(file)
-	defer f.Close()
+	defer func() { Must(f.Close()) }()
 	buf, e := ioutil.ReadAll(f)
 	Must(e)
 	return bytes.NewReader(buf)
